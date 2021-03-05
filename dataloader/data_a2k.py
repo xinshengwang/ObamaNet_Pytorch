@@ -55,7 +55,7 @@ def load_and_processing(args,split):
     keys = sorted(list(set(av_keys).intersection(set(split_keys))))
 
     time_delay = cfg.time_delay
-    time_delay = cfg.look_back
+    look_back = cfg.look_back
     i = 0
     for key in keys:
         audio = audio_kp[key]
