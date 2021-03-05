@@ -62,7 +62,7 @@ def load_and_processing(args,split):
         video = video_kp[key]
 
         if (len(audio) > len(video)):
-    		audio = audio[0:len(video)]
+            audio = audio[0:len(video)]
         else:
             video = video[0:len(audio)]
         start = (time_delay-look_back) if (time_delay-look_back > 0) else 0
