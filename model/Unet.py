@@ -26,9 +26,9 @@ def blockUNet_D(in_c, out_c, name, transposed=False, bn=True, relu=True, dropout
   else:
     block.add_module('%s_leakyrelu' % name, nn.LeakyReLU(0.2, inplace=True))
   if not transposed:
-    block.add_module('%s_conv' % name, spectral_norm(nn.Conv2d(in_c, out_c, 4, 2, 1, bias=False)))
+    block.add_module('%s_conv' % name, nn.Conv2d(in_c, out_c, 4, 2, 1, bias=False)) # spectral_norm
   else:
-    block.add_module('%s_tconv' % name, spectral_norm(nn.ConvTranspose2d(in_c, out_c, 4, 2, 1, bias=False)))
+    block.add_module('%s_tconv' % name, nn.ConvTranspose2d(in_c, out_c, 4, 2, 1, bias=False)) # spectral_norm
   if bn:
     block.add_module('%s_bn' % name, nn.BatchNorm2d(out_c))
   if dropout:

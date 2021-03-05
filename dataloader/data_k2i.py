@@ -20,7 +20,7 @@ class k2i_data(data.DataLoader):
         if split == 'val':
             self.filenames = self.filenames[:10]
         elif split == 'test':
-            self.filenames = self.filenames[:300]
+            self.filenames = self.filenames
         # elif split == 'test':
         #     new_filenames = []
         #     for item in self.filenames:
@@ -58,7 +58,7 @@ class k2i_data(data.DataLoader):
             img = image_loader(image_path,self.norm)
             lip = image_loader(lip_path,normalize=self.norm)        
         else:
-            data_path = 'output/aud2kyp/real_fake'
+            data_path = self.root
             lip_path = os.path.join(data_path,image_name)
             lip = image_loader(lip_path,normalize=self.norm)  
         if self.split == 'train':

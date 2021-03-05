@@ -51,14 +51,13 @@ def train_a2k(model,train_loader,val_loader,args):
     while epoch<=args.max_epochs:
         adjust_learning_rate(args.learning_rate,args.lr_decay,optimizer,epoch,args)
         model.train()
-        for i, (audio,keyp,mask) in enumerate(train_loader):
+        for i, (audio,keyp) in enumerate(train_loader):
             global_step += 1
             audio = audio.float().to(device)
             keyp = keyp.float().to(device)
-            mask = mask.long().to(device)
             optimizer.zero_grad()
             pred = model(audio)
-            loss = criterion(pred*mask,keyp)
+            loss = criterion(pred,keyp)
             loss.backward()
             optimizer.step()
             loss_meter.update(loss.item(),audio.shape[0])
@@ -81,13 +80,12 @@ def eval(model,data_loader,args,epoch,criterion):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     model.eval()
     val_loss_meter = AverageMeter()
-    for i, (audio,keyp,mask) in enumerate(data_loader):
+    for i, (audio,keyp) in enumerate(data_loader):
         audio = audio.float().to(device)
         keyp = keyp.float().to(device)
-        mask = mask.long().to(device)
         with torch.no_grad():
             pred = model(audio)
-            val_loss = criterion(pred*mask,keyp)
+            val_loss = criterion(pred,keyp)
         val_loss_meter.update(val_loss.item(),audio.shape[0])
     val_loss = val_loss_meter.avg
     save_dir = os.path.join(args.exp_dir,'images',str(epoch))
@@ -122,7 +120,7 @@ def _test(model,data_loader,args):
         # pdb.set_trace()
         audio = audio.float().to(device).squeeze(0)
         keyp = keyp.float().to(device).squeeze(0)
-        save_dir = os.path.join(args.exp_dir,'test_gt_d5',key[0])
+        save_dir = os.path.join(args.exp_dir,'test',key[0])
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         with torch.no_grad():

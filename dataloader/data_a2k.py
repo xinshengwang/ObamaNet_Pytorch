@@ -71,6 +71,7 @@ def load_and_processing(args,split):
             v = np.array(video[i+look_back-time_delay]).reshape((1, -1))
             X.append(a)
             y.append(v)
+            name = key + '/' + str(i).zfill(5)
 
     X = np.array(X)
     y = np.array(y)
@@ -104,12 +105,11 @@ def load_test_data(key,args):
         pca = pkl.load(pkl_file)
  
     # Get the data
+    X, y = [], []
 
     time_delay = cfg.time_delay
     look_back = cfg.look_back
 
-    audio = audio_kp[key]
-    video = video_kp[key]
     audio = audio_kp[key]
     video = video_kp[key]
 
@@ -148,7 +148,7 @@ class a2k_data(data.Dataset):
         self.split = split
         self.args = args
         if split == 'test':
-            self.filenames = load_split(split,args.path_root)
+            self.filenames = load_split(split,args.path_root)[:20]
         else:
             self.audio, self.keyps = load_and_processing(self.args,self.split)
         

@@ -275,9 +275,9 @@ def visualization_lip(y_pred,y_gt,outputFolder):
         pca = pkl.load(pkl_file)
     # Get the original keypoints file of the target video
     with open('/tudelft.net/staff-bulk/ewi/insy/MMC/xinsheng/data/avatar/Obama/Obama/clip/for_ObamaNet/target_masked_images/target_raw_kp.pickle', 'rb') as pkl_file:
-        kp = pkl.load(pkl_file)[4:]
+        kp = pkl.load(pkl_file)
 
-    video = video_kp[4:]
+    video = video_kp
     y = np.array(video)
     scalery = MinMaxScaler(feature_range=(0, 1))
     y = scalery.fit_transform(y)
@@ -312,11 +312,13 @@ def visualization_lip(y_pred,y_gt,outputFolder):
         kpsg = getOriginalKeypoints(xg, N, tilt, mean)
         keypointsg[48:68] = kpsg
 
-        imgfile = '/tudelft.net/staff-bulk/ewi/insy/MMC/xinsheng/data/avatar/Obama/Obama/clip/for_ObamaNet/target_masked_images/' + str(idx+5).zfill(5) + '.png'
+        imgfile = '/tudelft.net/staff-bulk/ewi/insy/MMC/xinsheng/data/avatar/Obama/Obama/clip/for_ObamaNet/target_masked_images/' + str(idx).zfill(5) + '.png'
         im = cv2.imread(imgfile)
-        im2 = im.copy()
-        # drawLips(keypoints, im, c = (255, 255, 255), th = 1, show = False)
-        drawLips(keypointsg, im2, c = (255, 255, 255), th = 1, show = False)
-        # cv2.imwrite(os.path.join(outputFolder, str(idx).zfill(5) + '.png'), im)
-        cv2.imwrite(os.path.join(outputFolder, str(idx).zfill(5) + '_gt.png'), im2)
+        # im2 = im.copy()
+        drawLips(keypoints, im, c = (255, 255, 255), th = 1, show = False)
+        # drawLips(keypointsg, im2, c = (255, 255, 255), th = 1, show = False)
+        cv2.imwrite(os.path.join(outputFolder, str(idx).zfill(5) + '.png'), im)
+        # cv2.imwrite(os.path.join(outputFolder, str(idx).zfill(5) + '_gt.png'), im2)
+        if idx>500:
+            break
     print('Done writing', n, 'images')

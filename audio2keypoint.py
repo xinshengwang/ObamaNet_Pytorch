@@ -26,7 +26,7 @@ def worker_init_fn(worker_id):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train the audio-to-keypoint network')
-    parser.add_argument('--train',type=bool,default=True)
+    parser.add_argument('--train',type=bool,default=False)
     parser.add_argument('--cfg',dest='cfg_file',type=str,default=None,
                         help='optional config file')
     parser.add_argument('--path_root',type=str,default='/tudelft.net/staff-bulk/ewi/insy/MMC/xinsheng/data/avatar/Obama/Obama/clip') 
@@ -39,7 +39,7 @@ def parse_args():
     parser.add_argument('--batch_size', default=64, type=int,
                         metavar='N', help='mini-batch size (default: 100)')
     # setting training parameter    
-    parser.add_argument("--exp_dir",type=str,default='output/aud2kyp/with_lookback')
+    parser.add_argument("--exp_dir",type=str,default='output/aud2kyp')
     parser.add_argument("--optim", type=str, default="adam",
                         help="training optimizer", choices=["sgd", "adam"])
 
@@ -64,15 +64,16 @@ if __name__ == "__main__":
     if args.cfg_file is not None:
         cfg_from_file(args.cfg_file)
     model = audio2kp()
-    dataset_train = a2k_data(args,'train')
-    dataset_val = a2k_data(args,'val')
-    dataset_test = a2k_data(args,'test')
-    data_loader_train = torch.utils.data.DataLoader(dataset_train,batch_size=args.batch_size,shuffle=True,num_workers=args.workers,worker_init_fn=worker_init_fn)
-    data_loader_val = torch.utils.data.DataLoader(dataset_val,batch_size=args.batch_size,shuffle=False,num_workers=args.workers,worker_init_fn=worker_init_fn)
+    
     if args.train:
+        dataset_train = a2k_data(args,'train')
+        dataset_val = a2k_data(args,'val')
+        data_loader_train = torch.utils.data.DataLoader(dataset_train,batch_size=args.batch_size,shuffle=True,num_workers=args.workers,worker_init_fn=worker_init_fn)
+        data_loader_val = torch.utils.data.DataLoader(dataset_val,batch_size=args.batch_size,shuffle=False,num_workers=args.workers,worker_init_fn=worker_init_fn)
         train_a2k(model,data_loader_train,data_loader_val,args)
     else:
         from traintest.train_a2k import _test
+        dataset_test = a2k_data(args,'test')
         data_loader_test = torch.utils.data.DataLoader(dataset_test,batch_size=1,shuffle=False,num_workers=args.workers,worker_init_fn=worker_init_fn)
         _test(model,data_loader_test,args)
 
