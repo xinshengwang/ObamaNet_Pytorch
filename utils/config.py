@@ -12,7 +12,7 @@ __C.lstm_layer = 2
 __C.drop = 0.25
 __C.out_channel = 8
 __C.time_delay = 20
-
+__C.look_back = 50
 # Unet parameter
 __C.Unet = edict()
 __C.Unet.inputChannelSize = 3
