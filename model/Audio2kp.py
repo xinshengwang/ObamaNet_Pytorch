@@ -14,5 +14,5 @@ class audio2kp(nn.Module):
     
     def forward(self,x):
         x,_ = self.lstm(x)
-        x = self.fc(x)
+        x = self.fc(x[:,-1,:])
         return x

@@ -26,29 +26,28 @@ def worker_init_fn(worker_id):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train the audio-to-keypoint network')
-    parser.add_argument('--train',type=bool,default=False)
+    parser.add_argument('--train',type=bool,default=True)
     parser.add_argument('--cfg',dest='cfg_file',type=str,default=None,
                         help='optional config file')
     parser.add_argument('--path_root',type=str,default='/tudelft.net/staff-bulk/ewi/insy/MMC/xinsheng/data/avatar/Obama/Obama/clip') 
     parser.add_argument('--resume',type=bool,default=True)
-    parser.add_argument('--time_steps',type=int,default=300)
     parser.add_argument('--time_delay',type=int,default=20)
     parser.add_argument('--workers',type=int,default=0,
                         help='number of workers for loading data')  
     parser.add_argument('--manualSeed',type=int,default= 200,
                         help='manual seed')
-    parser.add_argument('--batch_size', default=16, type=int,
+    parser.add_argument('--batch_size', default=64, type=int,
                         metavar='N', help='mini-batch size (default: 100)')
     # setting training parameter    
-    parser.add_argument("--exp_dir",type=str,default='output/aud2kyp')
+    parser.add_argument("--exp_dir",type=str,default='output/aud2kyp/with_lookback')
     parser.add_argument("--optim", type=str, default="adam",
                         help="training optimizer", choices=["sgd", "adam"])
 
     parser.add_argument('--learning_rate', default=0.0001, type=float,
                         metavar='LR', help='initial learning rate')
-    parser.add_argument("--max_epochs",type=int,default=30)
-    parser.add_argument('--lrd_start',default=10,type=int, help='after which epoch the learning rate start to decrease')
-    parser.add_argument('--lr_decay', default=35, type=int, metavar='LRDECAY',
+    parser.add_argument("--max_epochs",type=int,default=50)
+    parser.add_argument('--lrd_start',default=25,type=int, help='after which epoch the learning rate start to decrease')
+    parser.add_argument('--lr_decay', default=50, type=int, metavar='LRDECAY',
                         help='after lr_decay epochs the learning rate decreases to zero')
     parser.add_argument('--momentum', default=0.9, type=float, metavar='M',
                         help='momentum')
