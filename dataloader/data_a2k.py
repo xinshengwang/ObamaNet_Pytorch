@@ -111,7 +111,7 @@ def load_test_data(key,args):
     audio = audio_kp[key]
     video = video_kp[key]
     audio = audio_kp[key]
-        video = video_kp[key]
+    video = video_kp[key]
 
     if (len(audio) > len(video)):
         audio = audio[0:len(video)]
